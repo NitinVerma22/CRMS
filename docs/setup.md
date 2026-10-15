@@ -58,25 +58,14 @@ Generate your application key:
 php artisan key:generate
 ```
 
-### Step 3.4: Database Configuration
+### Step 3.4: Database Configuration (MySQL 8 Primary)
 
-#### Option A: Zero-Config SQLite (Default Local)
-1. Ensure `DB_CONNECTION=sqlite` in `.env`:
-   ```env
-   DB_CONNECTION=sqlite
-   DB_DATABASE=database/database.sqlite
-   ```
-2. Create the SQLite file if it doesn't exist:
-   ```bash
-   touch database/database.sqlite
-   ```
-
-#### Option B: MySQL 8 Configuration
-1. Create a MySQL database:
+#### Primary Target: MySQL 8.0+
+1. Create the MySQL database using utf8mb4 encoding:
    ```sql
    CREATE DATABASE crm_saas_mvp CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
    ```
-2. Update `.env` with MySQL credentials:
+2. Configure `.env` with your local MySQL credentials:
    ```env
    DB_CONNECTION=mysql
    DB_HOST=127.0.0.1
@@ -86,11 +75,26 @@ php artisan key:generate
    DB_PASSWORD=your_mysql_password
    ```
 
-### Step 3.5: Run Migrations and Seed Demo Data
-Execute the database migrations and seed the complete demo environment (creates permissions, roles, teams, demo users, leads, call logs, follow-ups, and isolation test tenants):
-```bash
-php artisan migrate:fresh --seed
+#### Optional: Zero-Setup SQLite Fallback
+For quick, isolated local evaluation without a running MySQL service:
+```env
+DB_CONNECTION=sqlite
+DB_DATABASE=database/database.sqlite
 ```
+
+### Step 3.5: Run Migrations and Seed Demo Data
+
+#### For a Fresh Setup:
+Execute migrations and seed all roles, permissions, demo users, leads, and isolation fixtures:
+```bash
+# Run migrations to create all 26 schema tables
+php artisan migrate
+
+# Seed complete CRM dataset
+php artisan db:seed
+```
+
+*(Note: In production environments, never run `migrate:fresh` or destructive commands without explicit backup verification.)*
 
 ### Step 3.6: Start Backend Dev Server
 ```bash

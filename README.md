@@ -62,7 +62,8 @@ cp .env.example .env
 php artisan key:generate
 
 # Run migrations and seed complete demo dataset (Users, Roles, Leads, Calls, Follow-ups)
-php artisan migrate:fresh --seed
+php artisan migrate
+php artisan db:seed
 
 # Start backend server on port 8000
 php artisan serve --host=127.0.0.1 --port=8000
